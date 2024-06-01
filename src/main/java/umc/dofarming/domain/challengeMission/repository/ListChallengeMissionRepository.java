@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import umc.dofarming.domain.challengeMission.controller.response.ListChallengeMissionDto;
+import umc.dofarming.domain.enums.MissionStatus;
 import umc.dofarming.util.SecurityUtils;
 
 @Repository
@@ -39,5 +40,18 @@ public class ListChallengeMissionRepository {
         memberMission.member.loginId.eq(SecurityUtils.getCurrentMemberLoginId())
       )
       .fetch();
+  }
+
+  public long getCompletedMissionCount(Long challengeId) {
+
+    return queryFactory
+      .selectFrom(challengeMission)
+      .innerJoin(memberMission).on(challengeMission.eq(memberMission.challengeMission))
+      .where(
+        challengeMission.challenge.id.eq(challengeId),
+        memberMission.missionStatus.eq(MissionStatus.COMPLETE),
+        memberMission.member.loginId.eq(SecurityUtils.getCurrentMemberLoginId())
+      )
+      .fetch().size();
   }
 }

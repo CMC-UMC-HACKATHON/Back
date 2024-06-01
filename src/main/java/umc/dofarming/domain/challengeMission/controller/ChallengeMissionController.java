@@ -20,7 +20,7 @@ public class ChallengeMissionController {
   private final ChallengeMissionService challengeMissionService;
 
   @GetMapping("/{challengeId}")
-  @Operation(summary = "오늘의 미션")
+  @Operation(summary = "오늘의 미션 & 총 미션 달성 수")
   public ApiResponse<ListChallengeMissionResponse> getChallengeMission(@PathVariable Long challengeId) {
     return ApiResponse.onCreate(challengeMissionService.getChallengeMission(challengeId));
   }

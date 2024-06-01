@@ -24,8 +24,10 @@ public class ListChallengeMissionService {
     for (ListChallengeMissionDto dto : challengeMissionList) {
       dto.updateMissionName(Mission.valueOf(dto.getMissionName()).getTitle());
     }
+    long completedMissionCount = listChallengeMissionRepository.getCompletedMissionCount(challengeId);
 
     return ListChallengeMissionResponse.builder()
+      .completedMissionCount(completedMissionCount)
       .missionList(challengeMissionList)
       .build();
   }

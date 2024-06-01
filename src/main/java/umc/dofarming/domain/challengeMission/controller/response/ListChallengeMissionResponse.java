@@ -10,6 +10,9 @@ import lombok.Getter;
 @Schema(description = "챌린지 미션 목록 응답 객체")
 public class ListChallengeMissionResponse {
 
+  @Schema(description = "총 미션 달성 수")
+  private long completedMissionCount;
+
   @Schema(description = "챌린지 미션 목록 응답 객체 list")
   private List<ListChallengeMissionDto> missionList;
 }
