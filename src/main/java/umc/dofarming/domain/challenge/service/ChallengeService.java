@@ -18,6 +18,8 @@ import umc.dofarming.api_response.exception.GeneralException;
 import umc.dofarming.api_response.status.ErrorStatus;
 import umc.dofarming.domain.challenge.dto.ChallengeResponse;
 import umc.dofarming.domain.challenge.mapper.ChallengeMapper;
+import umc.dofarming.domain.enums.Category;
+import umc.dofarming.domain.enums.RewardType;
 import umc.dofarming.domain.enums.SortBy;
 import umc.dofarming.domain.member.Member;
 import umc.dofarming.domain.member.service.DetailMemberService;
@@ -25,6 +27,7 @@ import umc.dofarming.domain.memberChallenge.MemberChallenge;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
@@ -52,7 +55,7 @@ public class ChallengeService {
     }
 
     //현재 진행중인 챌린지 리스트
-    @Transactional(readOnly = true)
+    @Transactional
     public List<ChallengeResponse.JoinChallenge> joinChallengeList(SortBy sortBy) {
         //sortBy 검증
         if(sortBy == null){
@@ -61,20 +64,20 @@ public class ChallengeService {
 
         //최신순
         if(SortBy.LATEST.equals(sortBy)){
-            List<Challenge> challenges =challengeRepository.findByStartDateAfterOrderByStartDateDesc(LocalDateTime.now());
+            List<Challenge> challenges =challengeRepository.findByStartDateAfterOrderByStartDateDesc(now());
 
-            return challenges.stream()
+            List<ChallengeResponse.JoinChallenge> dto = challenges.stream()
                             .map(challenge ->
                                     ChallengeMapper.toJoinChallenge //response 매핑
                                             (challenge, memberChallengeRepository.countByChallenge(challenge))
                             )
                                     .collect(Collectors.toList());
-
+            return validateChallengeCreation(dto,0);
 
         } else if (SortBy.POPULAR.equals(sortBy)) {
             //인기순 정렬 (기준-> 참여하는 사람의 수)
-            List<Challenge> challenges = challengeRepository.findByStartDateAfter(LocalDateTime.now());
-            return challenges.stream()
+            List<Challenge> challenges = challengeRepository.findByStartDateAfter(now());
+            List<ChallengeResponse.JoinChallenge> dto = challenges.stream()
                     .sorted((c1, c2) -> {
                         long count1 = memberChallengeRepository.countByChallenge(c1);
                         long count2 = memberChallengeRepository.countByChallenge(c2);
@@ -85,6 +88,8 @@ public class ChallengeService {
                                     (challenge, memberChallengeRepository.countByChallenge(challenge))
                     )
                     .collect(Collectors.toList());
+            return validateChallengeCreation(dto, -1);
+
         }else{
             throw new GeneralException(ErrorStatus.KEY_NOT_EXIST, "SortBy 값 오류");
         }
@@ -101,7 +106,7 @@ public class ChallengeService {
         }
 
         //시작일이 지난 챌린지인 경우
-        if(challenge.get().getStartDate().isBefore(LocalDateTime.now())){
+        if(challenge.get().getStartDate().isBefore(now())){
             throw new GeneralException(ErrorStatus.VALIDATION_ERROR, "시작 기한이 지난 챌린지");
         }
 
@@ -139,12 +144,61 @@ public class ChallengeService {
                 .build()).getId();
     }
 
-    /*@Transactional
-    public void createChallenge(){
-        challengeRepository.save(
+    @Transactional //챌린지 랜덤 생성
+    public ChallengeResponse.JoinChallenge createChallenge(){
+        Random random = new Random();
+
+        Category category = Category.values()[random.nextInt(Category.values().length)];
+        RewardType rewardType = RewardType.values()[random.nextInt(RewardType.values().length)];
+
+
+        Integer money = (random.nextInt(5) + 1)*10000; //1~5만원 랜덤
+
+        LocalDateTime currentDate = LocalDateTime.now(); // 오늘 시간
+        int startDayOffset = random.nextInt(16) + 10; // 10~25일 후에 시작
+        LocalDateTime startDate = dateTimeFomater(currentDate.plusDays(startDayOffset));
+
+        int weeksOffset = random.nextInt(4) + 1; // 마감일은 1~4주
+        LocalDateTime endDate = dateTimeFomater(startDate.plusWeeks(weeksOffset));
+
+        Challenge challenge = challengeRepository.save(
                 Challenge.builder()
-                        .money()
-        )
-    }*/
+                        .money(money)
+                        .title(category.getChallengeTitle())
+                        .startDate(startDate)
+                        .endDate(endDate)
+                        .profileUrl(category.getS3Url())
+                        .category(category)
+                        .rewardType(rewardType)
+                        .build()
+        );
+
+        return ChallengeMapper.toJoinChallenge(challenge, 0);
+    }
+
+    //챌린지 생성 조건 검증
+    @Transactional
+    public List<ChallengeResponse.JoinChallenge> validateChallengeCreation (List<ChallengeResponse.JoinChallenge> dto, int index){
+        if (dto.size() < 4) { //챌린지 생성 조건 검증
+            do {
+                if (index == -1) {
+                    dto.add(createChallenge()); //맨 뒤로 추가
+                } else {
+                    dto.add(index, createChallenge());
+                }
+            } while (dto.size() < 4);
+        }
+        return dto;
+    }
+
+    //00시로 맞춤
+    private LocalDateTime dateTimeFomater(LocalDateTime localDateTime){
+        localDateTime.withHour(0);
+        localDateTime.withMinute(0);
+        localDateTime.withSecond(0);
+        localDateTime.withNano(0);
+
+        return localDateTime;
+    }
 
 }
