@@ -1,0 +1,42 @@
+package umc.dofarming.api_response.status;
+
+import java.util.Optional;
+import java.util.function.Predicate;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import umc.dofarming.api_response.dto.ApiDto;
+import umc.dofarming.api_response.exception.BaseErrorCode;
+
+@Getter
+@RequiredArgsConstructor
+public enum ErrorStatus implements BaseErrorCode {
+
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청"),
+    VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "유효성 검증 오류"),
+    NOT_FOUND(HttpStatus.NOT_FOUND, "Not Found"),
+    KEY_NOT_EXIST(HttpStatus.BAD_REQUEST, "존재하지 않는 식별자"),
+    INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 에러"),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "권한 없음");
+    private final HttpStatus httpStatus;
+    private final String code;
+    private String message;
+
+
+    public String getMessage(String message) {
+        this.message = message;
+        return Optional.ofNullable(message)
+                .filter(Predicate.not(String::isBlank))
+                .orElse(this.getMessage());
+    }
+
+    @Override
+    public ApiDto getReasonHttpStatus() {
+        return ApiDto.builder()
+            .message(message)
+            .code(code)
+            .isSuccess(false)
+            .httpStatus(httpStatus)
+            .build();
+    }
+}
