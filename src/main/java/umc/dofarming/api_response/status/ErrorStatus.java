@@ -17,7 +17,11 @@ public enum ErrorStatus implements BaseErrorCode {
     NOT_FOUND(HttpStatus.NOT_FOUND, "Not Found"),
     KEY_NOT_EXIST(HttpStatus.BAD_REQUEST, "존재하지 않는 식별자"),
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 에러"),
-    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "권한 없음");
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "권한 없음")
+
+
+    ,TEMP_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "임시 에러");
+
     private final HttpStatus httpStatus;
     private final String code;
     private String message;
