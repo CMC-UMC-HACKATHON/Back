@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import umc.dofarming.domain.member.Member;
-import umc.dofarming.domain.service.DetailMemberService;
+import umc.dofarming.domain.member.service.DetailMemberService;
 
 @Service
 @RequiredArgsConstructor

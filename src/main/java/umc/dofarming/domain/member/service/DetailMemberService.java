@@ -1,4 +1,4 @@
-package umc.dofarming.domain.service;
+package umc.dofarming.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import umc.dofarming.api_response.exception.GeneralException;
 import umc.dofarming.api_response.status.ErrorStatus;
 import umc.dofarming.domain.member.Member;
-import umc.dofarming.domain.repository.MemberRepository;
+import umc.dofarming.domain.member.repository.MemberRepository;
 
 @Service
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package umc.dofarming.domain.controller.request;
+package umc.dofarming.domain.member.controller.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.AssertTrue;

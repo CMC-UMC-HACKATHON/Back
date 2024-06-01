@@ -1,4 +1,4 @@
-package umc.dofarming.domain.repository;
+package umc.dofarming.domain.member.repository;
 
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
