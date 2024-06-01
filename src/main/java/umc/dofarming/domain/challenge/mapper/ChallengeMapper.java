@@ -18,7 +18,7 @@ public class ChallengeMapper {
     ) {
         return ChallengeResponse.JoinChallenge.builder()
                 .challengeId(challenge.getId())
-                .title(challenge.getTitle())
+                .title(challenge.getCategory().getChallengeTitle())
                 .category(challenge.getCategory().getTitle())
                 .categoryImage(challenge.getCategory().getS3Url())
                 .rewardType(challenge.getRewardType().getTitle())
@@ -34,7 +34,7 @@ public class ChallengeMapper {
     ) {
         return ChallengeResponse.JoinChallengeDetail.builder()
                 .challengeId(challenge.getId())
-                .title(challenge.getTitle())
+                .title(challenge.getCategory().getChallengeTitle())
                 .category(challenge.getCategory().getTitle())
                 .categoryImage(challenge.getCategory().getS3Url())
                 .rewardType(challenge.getRewardType().getTitle())
