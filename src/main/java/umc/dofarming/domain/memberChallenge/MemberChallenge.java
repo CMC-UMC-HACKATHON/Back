@@ -8,6 +8,7 @@ import umc.dofarming.domain.member.Member;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberChallenge {
