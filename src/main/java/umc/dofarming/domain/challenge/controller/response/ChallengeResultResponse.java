@@ -23,8 +23,4 @@ public class ChallengeResultResponse {
   @Schema(description = "최종 상금 or 상품")
   private String reward;
 
-  public void update(int ranking, String reward) {
-    this.ranking = ranking;
-    this.reward = reward;
-  }
 }

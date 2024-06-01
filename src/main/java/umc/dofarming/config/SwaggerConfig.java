@@ -15,7 +15,7 @@ public class SwaggerConfig {
     public OpenAPI openAPI() {
 
         // SecuritySecheme명
-        String jwtSchemeName = "jwtAuth";
+        String jwtSchemeName = "JWT";
         // API 요청헤더에 인증정보 포함
         SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwtSchemeName);
         // SecuritySchemes 등록
@@ -37,8 +37,8 @@ public class SwaggerConfig {
 
     private Info apiInfo() {
         return new Info()
-                .title("돈파밍 API 명세서")
-                .description("Swagger UI for 돈파핑 서비스")
-                .version("1.0.0");
+                .title("DonFarming API 명세서")
+                .description("Swagger UI for DonFarming 서비스")
+                .version("v3");
     }
 }

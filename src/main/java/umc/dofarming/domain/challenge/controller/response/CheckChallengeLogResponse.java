@@ -13,5 +13,6 @@ import lombok.NoArgsConstructor;
 @Schema(description = "챌린지 최종 결과 확인 여부 응답 객체")
 public class CheckChallengeLogResponse {
 
+  @Schema(description = "챌린지 최종 결과 확인 여부")
   private boolean checkYN;
 }

@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import umc.dofarming.api_response.ApiResponse;
@@ -57,7 +59,7 @@ public class ChallengeController {
   })
   public ApiResponse<List<ChallengeResponse.JoinChallenge>> joinChallengeList
     (
-      @RequestParam("sortBy") SortBy sortBy
+      @RequestParam("sortBy") @Valid @NotNull SortBy sortBy
     ) {
     return ApiResponse.onSuccess(challengeService.joinChallengeList(sortBy));
   }
