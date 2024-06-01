@@ -7,7 +7,6 @@ import umc.dofarming.domain.challenge.DTO.ChallengeResponseDTO;
 import umc.dofarming.domain.challenge.converter.ChallengeConverter;
 import umc.dofarming.domain.challenge.repository.ChallengeRepository;
 import umc.dofarming.domain.member.repository.MemberRepository;
-import umc.dofarming.domain.memberChallenge.repository.MemberChallengeQueryDSLRepositoryImpl;
 import umc.dofarming.domain.memberChallenge.repository.MemberChallengeRepository;
 import umc.dofarming.util.SecurityUtils;
 
@@ -16,7 +15,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ChallengeService {
-    private final ChallengeRepository challengeRepository;
     private final MemberRepository memberRepository;
     private final MemberChallengeRepository memberChallengeRepository;
     public ChallengeResponseDTO.GetMyChallengeInfoResultList findMyChallengeInfo(boolean ongoing){

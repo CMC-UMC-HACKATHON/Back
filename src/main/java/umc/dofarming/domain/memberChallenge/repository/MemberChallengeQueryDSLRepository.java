@@ -5,5 +5,5 @@ import umc.dofarming.domain.challenge.Challenge;
 import java.util.List;
 
 public interface MemberChallengeQueryDSLRepository {
-    public List<Challenge> findChallengesByMemberId(Long memberId, boolean ongoing);
+    List<Challenge> findChallengesByMemberId(Long memberId, boolean ongoing);
 }

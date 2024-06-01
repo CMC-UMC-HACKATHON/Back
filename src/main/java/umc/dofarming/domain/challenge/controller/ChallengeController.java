@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import umc.dofarming.api_response.ApiResponse;
 import umc.dofarming.domain.challenge.DTO.ChallengeResponseDTO;
 import umc.dofarming.domain.challenge.service.ChallengeService;
-import umc.dofarming.domain.member.repository.MemberRepository;
 
 @RestController
 @RequestMapping("/challenges")
