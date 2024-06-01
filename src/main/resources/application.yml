@@ -18,3 +18,16 @@ spring:
     url: ${DB_URL_DEV}
     username: ${DB_USERNAME_DEV}
     password: ${DB_PW_DEV}
+cloud:
+  aws:
+    s3:
+      bucket: ${AWS_S3_BUCKET}
+    stack:
+      auto: false
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_KEY}
+    region:
+      static: ap-northeast-2
+      auto: false
+
