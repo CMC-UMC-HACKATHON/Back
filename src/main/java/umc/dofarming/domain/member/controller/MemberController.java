@@ -15,7 +15,7 @@ import umc.dofarming.domain.member.controller.response.LoginResponse;
 import umc.dofarming.domain.member.service.MemberService;
 
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/members")
 @RequiredArgsConstructor
 @Tag(name = "MemberController", description = "멤버 관련 API")
 public class MemberController {
