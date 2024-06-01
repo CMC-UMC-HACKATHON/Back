@@ -83,7 +83,7 @@ public class ChallengeService {
         }
 
         //시작일이 지난 챌린지인 경우
-        if(challenge.get().getStartDate().isAfter(LocalDateTime.now())){
+        if(challenge.get().getStartDate().isBefore(LocalDateTime.now())){
             throw new GeneralException(ErrorStatus.VALIDATION_ERROR, "시작 기한이 지난 챌린지");
         }
 
