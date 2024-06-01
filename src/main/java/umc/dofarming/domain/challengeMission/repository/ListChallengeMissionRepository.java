@@ -24,10 +24,10 @@ public class ListChallengeMissionRepository {
 
     return queryFactory
       .select(Projections.fields(ListChallengeMissionDto.class,
-        challengeMission.id.as("missionId"),
-        memberMission.missionStatus,
-        challengeMission.type.as("missionType"),
-        challengeMission.mission.stringValue().as("missionName")
+          challengeMission.id.as("missionId"),
+          memberMission.missionStatus,
+          challengeMission.type.as("missionType"),
+          challengeMission.mission.stringValue().as("missionName")
         )
       )
       .from(challengeMission)
@@ -52,6 +52,21 @@ public class ListChallengeMissionRepository {
         memberMission.missionStatus.eq(MissionStatus.COMPLETE),
         memberMission.member.loginId.eq(SecurityUtils.getCurrentMemberLoginId())
       )
+      .fetch().size();
+  }
+
+  public long getCompleteYN(Long challengeId, LocalDate now) {
+    return queryFactory
+      .selectFrom(memberMission)
+      .innerJoin(challengeMission).on(memberMission.challengeMission.eq(challengeMission))
+      .where(
+        challengeMission.id.eq(challengeId),
+        memberMission.missionStatus.eq(MissionStatus.COMPLETE),
+        memberMission.member.loginId.eq(SecurityUtils.getCurrentMemberLoginId()),
+        challengeMission.missionDate.year().eq(now.getYear()),
+        challengeMission.missionDate.month().eq(now.getMonthValue()),
+        challengeMission.missionDate.dayOfMonth().eq(now.getDayOfMonth())
+        )
       .fetch().size();
   }
 }
