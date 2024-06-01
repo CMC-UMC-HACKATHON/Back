@@ -18,6 +18,7 @@ import umc.dofarming.domain.test.service.TestService;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/tests")
+@Deprecated
 public class TestController {
 
     private final TestService testService;
