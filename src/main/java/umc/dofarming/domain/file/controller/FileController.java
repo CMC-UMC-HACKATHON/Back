@@ -1,7 +1,10 @@
 package umc.dofarming.domain.file.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +21,10 @@ public class FileController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "파일 생성 API")
-    public FileCreateResponse createFile(@RequestPart("file") MultipartFile file) {
+    public FileCreateResponse createFile(
+            @Valid @Parameter(
+                    content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE) )
+            @RequestPart("file") MultipartFile file) {
         return fileService.createFile("test", file);
     }
 
