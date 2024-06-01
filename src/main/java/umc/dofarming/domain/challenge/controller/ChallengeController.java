@@ -26,15 +26,15 @@ public class ChallengeController {
 
     @PostMapping("/onging")
     @Operation(summary = "현재 참여 중인 챌린지")
-    public ApiResponse<ChallengeResponseDTO.GetMyChallengeInfoResultList> getOngoingChallengeInfoByMemberId() {
-        ChallengeResponseDTO.GetMyChallengeInfoResultList getMyChallengeInfoResultList = challengeService.findMyChallengeInfo(true);
+    public ApiResponse<List<ChallengeResponseDTO.GetMyChallengeInfoResult>> getOngoingChallengeInfoByMemberId() {
+        List<ChallengeResponseDTO.GetMyChallengeInfoResult> getMyChallengeInfoResultList = challengeService.findMyChallengeInfo(true);
         return ApiResponse.onSuccess(getMyChallengeInfoResultList);
     }
 
     @PostMapping("/complete")
     @Operation(summary = "참여 완료한 챌린지")
-    public ApiResponse<ChallengeResponseDTO.GetMyChallengeInfoResultList> getCompleteChallengeInfoByMemberId() {
-        ChallengeResponseDTO.GetMyChallengeInfoResultList getMyChallengeInfoResultList = challengeService.findMyChallengeInfo(false);
+    public ApiResponse<List<ChallengeResponseDTO.GetMyChallengeInfoResult>> getCompleteChallengeInfoByMemberId() {
+        List<ChallengeResponseDTO.GetMyChallengeInfoResult> getMyChallengeInfoResultList = challengeService.findMyChallengeInfo(false);
         return ApiResponse.onSuccess(getMyChallengeInfoResultList);
     }
 

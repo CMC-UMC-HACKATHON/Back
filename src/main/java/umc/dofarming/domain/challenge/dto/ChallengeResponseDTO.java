@@ -10,15 +10,15 @@ public class ChallengeResponseDTO {
 
     @Builder
     public record GetMyChallengeInfoResult(
-            Long id,
+            Long challengeId,
             String title,
             LocalDateTime startDate,
             LocalDateTime endDate,
             String profileUrl,
             String rewardType,
             String category,
-            Long memberCount, // 해당 챌린지에 참여 중인 멤버의 수
-            Integer complete_rate
+            int memberCount // 해당 챌린지에 참여 중인 멤버의 수
+            //Integer complete_rate
     ){
     }
 

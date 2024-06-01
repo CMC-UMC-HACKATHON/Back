@@ -8,8 +8,10 @@ import umc.dofarming.domain.challenge.converter.ChallengeConverter;
 import umc.dofarming.domain.challenge.repository.ChallengeRepository;
 import umc.dofarming.domain.member.repository.MemberRepository;
 import umc.dofarming.domain.memberChallenge.repository.MemberChallengeRepository;
+import umc.dofarming.domain.memberChallenge.service.MemberChallengeService;
 import umc.dofarming.util.SecurityUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 import umc.dofarming.api_response.exception.GeneralException;
@@ -34,15 +36,21 @@ public class ChallengeService {
     private final MemberChallengeRepository memberChallengeRepository;
     private final ChallengeRepository challengeRepository;
     private final DetailMemberService detailMemberService;
+    private final MemberChallengeService memberChallengeService;
 
-
-    public ChallengeResponseDTO.GetMyChallengeInfoResultList findMyChallengeInfo(boolean ongoing){
+    public List<ChallengeResponseDTO.GetMyChallengeInfoResult> findMyChallengeInfo(boolean ongoing){
         String loginId = SecurityUtils.getCurrentMemberLoginId();
         Long memberId = memberRepository.findByLoginId(loginId).get().getId();
         List<Challenge> challengeList = memberChallengeRepository.findChallengesByMemberId(memberId, ongoing);
-
-        return ChallengeConverter.toChallengeResponseDTOList(challengeList);
+        List<ChallengeResponseDTO.GetMyChallengeInfoResult> getMyChallengeInfoResultList = new ArrayList<>();
+        for (Challenge challenge : challengeList) {
+            int count = memberChallengeRepository.findAllByChallenge(challenge).size();
+            ChallengeResponseDTO.GetMyChallengeInfoResult getMyChallengeInfoResult = ChallengeConverter.toChallengeResponseDTO(challenge, count);
+            getMyChallengeInfoResultList.add(getMyChallengeInfoResult);
+        }
+        return getMyChallengeInfoResultList;
     }
+
     //현재 진행중인 챌린지 리스트
     @Transactional(readOnly = true)
     public List<ChallengeResponse.JoinChallenge> joinChallengeList(SortBy sortBy) {

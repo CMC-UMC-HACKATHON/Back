@@ -27,11 +27,12 @@ public class MemberChallengeQueryDSLRepositoryImpl implements MemberChallengeQue
 
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
 
+        System.out.println("ongoing = " + ongoing);
         if (ongoing) {
-            addCondition(conditions, challenge.startDate.loe(startOfDay)
-                    .and(challenge.endDate.goe(startOfDay)));
+            addCondition(conditions, challenge.endDate.goe(startOfDay));
         } else {
-            addCondition(conditions, challenge.endDate.lt(startOfDay));
+            System.out.println("MemberChallengeQueryDSLRepositoryImpl.findChallengesByMemberId");
+            addCondition(conditions, challenge.endDate.loe(startOfDay));
         }
 
         return jpaQueryFactory
