@@ -24,9 +24,6 @@ public enum ErrorStatus implements BaseErrorCode {
     FAILED_UPLOAD_S3_IMAGE(HttpStatus.BAD_REQUEST, "S3 이미지 업로드 실패"),
     FAILED_UPLOAD_S3_FILE(HttpStatus.BAD_REQUEST, "S3 파일 업로드 실패"),
 
-    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "권한 없음"),
-
-
     TEMP_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "임시 에러");
 
     private final HttpStatus httpStatus;
