@@ -1,4 +1,4 @@
-package umc.dofarming.domain.challenge.DTO;
+package umc.dofarming.domain.challenge.dto;
 
 import lombok.Builder;
 

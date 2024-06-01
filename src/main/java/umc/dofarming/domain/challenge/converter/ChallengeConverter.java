@@ -1,7 +1,7 @@
 package umc.dofarming.domain.challenge.converter;
 
 import umc.dofarming.domain.challenge.Challenge;
-import umc.dofarming.domain.challenge.DTO.ChallengeResponseDTO;
+import umc.dofarming.domain.challenge.dto.ChallengeResponseDTO;
 import umc.dofarming.domain.memberChallenge.service.MemberChallengeService;
 
 import java.util.Collections;

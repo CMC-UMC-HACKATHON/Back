@@ -6,8 +6,6 @@ import umc.dofarming.domain.challengeMission.ChallengeMission;
 import umc.dofarming.domain.enums.MissionStatus;
 import umc.dofarming.domain.member.Member;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -30,6 +28,9 @@ public class MemberMission {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "memberMission", cascade = CascadeType.ALL)
-    private List<ChallengeMission> challengeMissionArrayList = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "challenge_mission_id")
+    private ChallengeMission challengeMission;
+
+
 }

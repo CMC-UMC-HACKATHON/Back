@@ -6,6 +6,7 @@ import umc.dofarming.domain.challenge.Challenge;
 import umc.dofarming.domain.enums.Mission;
 import umc.dofarming.domain.memberMission.MemberMission;
 
+import umc.dofarming.domain.enums.MissionType;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,6 +23,9 @@ public class ChallengeMission {
 
     @Enumerated(EnumType.STRING)
     private Mission mission;
+
+    @Enumerated(EnumType.STRING)
+    private MissionType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "challenge_id")
