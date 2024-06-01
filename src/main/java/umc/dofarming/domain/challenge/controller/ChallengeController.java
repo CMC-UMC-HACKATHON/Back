@@ -15,13 +15,32 @@ import umc.dofarming.domain.enums.SortBy;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import umc.dofarming.domain.challenge.dto.ChallengeResponseDTO;
 
 @RestController
 @RequestMapping("/challenges")
 @RequiredArgsConstructor
+@Tag(name = "챌린지 API", description = "공지사항 댓글 관련 API")
 public class ChallengeController {
-
     private final ChallengeService challengeService;
+
+    @PostMapping("/onging")
+    @Operation(summary = "현재 참여 중인 챌린지")
+    public ApiResponse<List<ChallengeResponseDTO.GetMyChallengeInfoResult>> getOngoingChallengeInfoByMemberId() {
+        List<ChallengeResponseDTO.GetMyChallengeInfoResult> getMyChallengeInfoResultList = challengeService.findMyChallengeInfo(true);
+        return ApiResponse.onSuccess(getMyChallengeInfoResultList);
+    }
+
+    @PostMapping("/complete")
+    @Operation(summary = "참여 완료한 챌린지")
+    public ApiResponse<List<ChallengeResponseDTO.GetMyChallengeInfoResult>> getCompleteChallengeInfoByMemberId() {
+        List<ChallengeResponseDTO.GetMyChallengeInfoResult> getMyChallengeInfoResultList = challengeService.findMyChallengeInfo(false);
+        return ApiResponse.onSuccess(getMyChallengeInfoResultList);
+    }
 
     @GetMapping("")
     @Operation(summary = "챌린지 리스트 조회 API", description = "Defult 챌린지 리스트 4개, 한 챌린지가 끝나면 자동으로 다른 랜덤한 챌린지가 만들어짐")

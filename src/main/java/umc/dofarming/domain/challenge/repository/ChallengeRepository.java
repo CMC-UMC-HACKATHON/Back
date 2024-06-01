@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import umc.dofarming.domain.challenge.Challenge;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

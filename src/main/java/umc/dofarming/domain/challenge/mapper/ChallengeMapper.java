@@ -6,8 +6,6 @@ import umc.dofarming.domain.challenge.Challenge;
 import umc.dofarming.domain.challenge.dto.ChallengeResponse;
 import umc.dofarming.global.converter.DataConverter;
 
-import java.text.DateFormat;
-
 @Component
 @RequiredArgsConstructor
 public class ChallengeMapper {

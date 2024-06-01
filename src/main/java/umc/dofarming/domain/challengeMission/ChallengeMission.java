@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import umc.dofarming.domain.challenge.Challenge;
 import umc.dofarming.domain.enums.Mission;
+import umc.dofarming.domain.memberMission.MemberMission;
+
 import umc.dofarming.domain.enums.MissionType;
 import java.time.LocalDateTime;
 
@@ -29,4 +31,7 @@ public class ChallengeMission {
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_mission_id")
+    private MemberMission memberMission;
 }
