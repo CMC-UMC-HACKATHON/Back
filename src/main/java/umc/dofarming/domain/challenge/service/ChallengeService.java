@@ -121,4 +121,12 @@ public class ChallengeService {
                 .build()).getId();
     }
 
+    /*@Transactional
+    public void createChallenge(){
+        challengeRepository.save(
+                Challenge.builder()
+                        .money()
+        )
+    }*/
+
 }

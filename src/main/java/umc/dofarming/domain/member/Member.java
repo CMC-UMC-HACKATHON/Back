@@ -28,7 +28,7 @@ public class Member {
   @Comment("로그인 아이디")
   private String loginId;
 
-  @Column(nullable = false, unique = true)
+  @Column(nullable = false)
   @Comment("닉네임(이름)")
   private String username;
 
