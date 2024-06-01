@@ -6,16 +6,16 @@ import umc.dofarming.api_response.exception.GeneralException;
 import umc.dofarming.api_response.status.ErrorStatus;
 
 public class SecurityUtils {
-  private static Authentication getAuthentication() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication == null || authentication.getName() == null) {
-      throw new GeneralException(ErrorStatus.VALIDATION_ERROR, "유효하지 않은 토큰 입니다.");
+    private static Authentication getAuthentication() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getName() == null) {
+            throw new GeneralException(ErrorStatus.VALIDATION_ERROR, "유효하지 않은 토큰 입니다.");
+        }
+        return authentication;
     }
-    return authentication;
-  }
 
-  public static String getCurrentMemberLoginId() {
-    Authentication authentication = getAuthentication();
-    return authentication.getName();
-  }
+    public static String getCurrentMemberLoginId() {
+        Authentication authentication = getAuthentication();
+        return authentication.getName();
+    }
 }
