@@ -9,11 +9,18 @@ import umc.dofarming.domain.challenge.controller.response.CheckChallengeLogRespo
 import umc.dofarming.domain.challenge.dto.ChallengeResponseDTO;
 import umc.dofarming.domain.challenge.converter.ChallengeConverter;
 import umc.dofarming.domain.challenge.repository.ChallengeRepository;
+import umc.dofarming.domain.challengeMission.ChallengeMission;
+import umc.dofarming.domain.challengeMission.repository.ChallengeMissionRepository;
 import umc.dofarming.domain.challenge_log.ChallengeLog;
 import umc.dofarming.domain.challenge_log.repository.ChallengeLogRepository;
+import umc.dofarming.domain.enums.Mission;
+import umc.dofarming.domain.enums.MissionStatus;
+import umc.dofarming.domain.enums.MissionType;
 import umc.dofarming.domain.member.repository.MemberRepository;
 import umc.dofarming.domain.memberChallenge.repository.MemberChallengeRepository;
+import umc.dofarming.domain.memberMission.MemberMission;
 import umc.dofarming.domain.memberMission.repository.ListMemberMissionRepository;
+import umc.dofarming.domain.memberMission.repository.MemberMissionRepository;
 import umc.dofarming.util.SecurityUtils;
 
 import java.util.ArrayList;
@@ -36,6 +43,18 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
+import static umc.dofarming.domain.enums.Mission.COMMON1;
+import static umc.dofarming.domain.enums.Mission.COMMON2;
+import static umc.dofarming.domain.enums.Mission.COMMON4;
+import static umc.dofarming.domain.enums.Mission.CULTURE1;
+import static umc.dofarming.domain.enums.Mission.CULTURE2;
+import static umc.dofarming.domain.enums.Mission.CULTURE3;
+import static umc.dofarming.domain.enums.Mission.DAILY1;
+import static umc.dofarming.domain.enums.Mission.DAILY2;
+import static umc.dofarming.domain.enums.Mission.DAILY3;
+import static umc.dofarming.domain.enums.Mission.EXERCISE1;
+import static umc.dofarming.domain.enums.Mission.EXERCISE2;
+import static umc.dofarming.domain.enums.Mission.EXERCISE3;
 
 @Service
 @RequiredArgsConstructor
@@ -48,11 +67,14 @@ public class ChallengeService {
   private final DetailMemberService detailMemberService;
   private final ChallengeLogRepository challengeLogRepository;
   private final ListMemberMissionRepository listMemberMissionRepository;
+  private final ChallengeMissionRepository challengeMissionRepository;
+  private final MemberMissionRepository memberMissionRepository;
 
   public List<ChallengeResponseDTO.GetMyChallengeInfoResult> findMyChallengeInfo(boolean ongoing) {
     String loginId = SecurityUtils.getCurrentMemberLoginId();
-    Long memberId = memberRepository.findByLoginId(loginId).get().getId();
-    List<Challenge> challengeList = memberChallengeRepository.findChallengesByMemberId(memberId, ongoing);
+    Member member = memberRepository.findByLoginId(loginId)
+      .orElseThrow(() -> new GeneralException(ErrorStatus.NOT_FOUND));
+    List<Challenge> challengeList = memberChallengeRepository.findChallengesByMemberId(member.getId(), ongoing);
     List<ChallengeResponseDTO.GetMyChallengeInfoResult> getMyChallengeInfoResultList = new ArrayList<>();
     for (Challenge challenge : challengeList) {
       int count = memberChallengeRepository.findAllByChallenge(challenge).size();
@@ -63,12 +85,7 @@ public class ChallengeService {
   }
 
   //현재 진행중인 챌린지 리스트
-  @Transactional
   public List<ChallengeResponse.JoinChallenge> joinChallengeList(SortBy sortBy) {
-    //sortBy 검증
-    if (sortBy == null) {
-      throw new GeneralException(ErrorStatus.KEY_NOT_EXIST, "SortBy 값 오류");
-    }
 
     //최신순
     if (SortBy.LATEST.equals(sortBy)) {
@@ -135,8 +152,7 @@ public class ChallengeService {
     Member member = detailMemberService.findByLoginId(SecurityUtils.getCurrentMemberLoginId());
     //이미 참여한 챌린지인가
     if (memberChallengeRepository.existsByMemberAndChallenge(
-      member
-      , challenge.get())
+      member, challenge.get())
     ) {
       throw new GeneralException(ErrorStatus.VALIDATION_ERROR, "이미 참여한 챌린지입니다.");
     }
@@ -146,10 +162,23 @@ public class ChallengeService {
       throw new GeneralException(ErrorStatus.VALIDATION_ERROR, "시작 기한이 지난 챌린지");
     }
 
-    return memberChallengeRepository.save(MemberChallenge.builder()
+    Long savedId = memberChallengeRepository.save(MemberChallenge.builder()
       .challenge(challenge.get())
       .member(member)
       .build()).getId();
+
+    List<ChallengeMission> missionList = challengeMissionRepository.findAllByChallengeId(challengeId);
+    for (ChallengeMission mission : missionList) {
+      memberMissionRepository.save(
+        MemberMission.builder()
+          .missionStatus(MissionStatus.IN_PROGRESS)
+          .member(member)
+          .challengeMission(mission)
+          .build()
+      );
+    }
+
+    return savedId;
   }
 
   public ChallengeResultResponse getChallengeResult(Long challengeId) {
@@ -208,6 +237,116 @@ public class ChallengeService {
         .rewardType(rewardType)
         .build()
     );
+
+    challengeMissionRepository.save(
+      ChallengeMission.builder()
+        .challenge(challenge)
+        .missionDate(LocalDateTime.now())
+        .mission(Mission.COMMON1)
+        .type(MissionType.REQUIRE)
+        .build()
+    );
+    if (category.equals(Category.EXERCISE)) {
+      challengeMissionRepository.save(
+        ChallengeMission.builder()
+          .challenge(challenge)
+          .missionDate(LocalDateTime.now())
+          .mission(EXERCISE2)
+          .type(MissionType.OPTION)
+          .build()
+      );
+      challengeMissionRepository.save(
+        ChallengeMission.builder()
+          .challenge(challenge)
+          .missionDate(LocalDateTime.now())
+          .mission(EXERCISE3)
+          .type(MissionType.OPTION)
+          .build()
+      );
+      challengeMissionRepository.save(
+        ChallengeMission.builder()
+          .challenge(challenge)
+          .missionDate(LocalDateTime.now())
+          .mission(EXERCISE1)
+          .type(MissionType.OPTION)
+          .build()
+      );
+    } else if (category.equals(Category.COMMON)) {
+      challengeMissionRepository.save(
+        ChallengeMission.builder()
+          .challenge(challenge)
+          .missionDate(LocalDateTime.now())
+          .mission(COMMON4)
+          .type(MissionType.OPTION)
+          .build()
+      );
+      challengeMissionRepository.save(
+        ChallengeMission.builder()
+          .challenge(challenge)
+          .missionDate(LocalDateTime.now())
+          .mission(COMMON1)
+          .type(MissionType.OPTION)
+          .build()
+      );
+      challengeMissionRepository.save(
+        ChallengeMission.builder()
+          .challenge(challenge)
+          .missionDate(LocalDateTime.now())
+          .mission(COMMON2)
+          .type(MissionType.OPTION)
+          .build()
+      );
+    } else if (category.equals(Category.DAILY)) {
+      challengeMissionRepository.save(
+        ChallengeMission.builder()
+          .challenge(challenge)
+          .missionDate(LocalDateTime.now())
+          .mission(DAILY3)
+          .type(MissionType.OPTION)
+          .build()
+      );
+      challengeMissionRepository.save(
+        ChallengeMission.builder()
+          .challenge(challenge)
+          .missionDate(LocalDateTime.now())
+          .mission(DAILY1)
+          .type(MissionType.OPTION)
+          .build()
+      );
+      challengeMissionRepository.save(
+        ChallengeMission.builder()
+          .challenge(challenge)
+          .missionDate(LocalDateTime.now())
+          .mission(DAILY2)
+          .type(MissionType.OPTION)
+          .build()
+      );
+    } else if (category.equals(Category.CULTURE)) {
+      challengeMissionRepository.save(
+        ChallengeMission.builder()
+          .challenge(challenge)
+          .missionDate(LocalDateTime.now())
+          .mission(CULTURE1)
+          .type(MissionType.OPTION)
+          .build()
+      );
+      challengeMissionRepository.save(
+        ChallengeMission.builder()
+          .challenge(challenge)
+          .missionDate(LocalDateTime.now())
+          .mission(CULTURE2)
+          .type(MissionType.OPTION)
+          .build()
+      );
+      challengeMissionRepository.save(
+        ChallengeMission.builder()
+          .challenge(challenge)
+          .missionDate(LocalDateTime.now())
+          .mission(CULTURE3)
+          .type(MissionType.OPTION)
+          .build()
+      );
+    }
 
     return ChallengeMapper.toJoinChallenge(challenge, 0);
   }
