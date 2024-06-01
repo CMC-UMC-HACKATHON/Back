@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import umc.dofarming.api_response.ApiResponse;
+import umc.dofarming.domain.challenge.controller.response.ChallengeResultResponse;
 import umc.dofarming.domain.challenge.dto.ChallengeResponse;
 import umc.dofarming.domain.challenge.service.ChallengeService;
 import umc.dofarming.domain.enums.SortBy;
@@ -96,6 +97,10 @@ public class ChallengeController {
         return ApiResponse.onSuccess(challengeService.postChallengeMission(challengeId));
     }
 
-
+    @GetMapping("/{challengeId}/result")
+    @Operation(summary = "챌린지 결과 조회")
+    public ApiResponse<ChallengeResultResponse> getChallengeResult(@PathVariable Long challengeId) {
+        return ApiResponse.onSuccess(challengeService.getChallengeResult(challengeId));
+    }
 
 }

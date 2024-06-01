@@ -1,5 +1,6 @@
 package umc.dofarming.domain.memberChallenge.repository;
 
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import umc.dofarming.domain.memberChallenge.MemberChallenge;
@@ -16,4 +17,6 @@ public interface MemberChallengeRepository extends JpaRepository<MemberChallenge
     Boolean existsByMemberAndChallenge(Member member, Challenge challenge);
 
     List<MemberChallenge> findAllByChallenge(Challenge challenge);
+
+    Optional<MemberChallenge> findByMemberAndChallenge(Member member, Challenge challenge);
 }
