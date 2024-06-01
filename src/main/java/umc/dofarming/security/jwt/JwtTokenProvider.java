@@ -46,12 +46,12 @@ public class JwtTokenProvider {
       .setSubject(authentication.getName())
       .claim("auth", authorities)
       .claim("loginId", loginId)
-      .setExpiration(new Date(now + 3600000))
+      .setExpiration(new Date(now + 360000000))
       .signWith(key)
       .compact();
 
     String refreshToken = Jwts.builder()
-      .setExpiration(new Date(now + 86400000))
+      .setExpiration(new Date(now + 864000000))
       .signWith(key)
       .compact();
 
