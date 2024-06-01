@@ -5,11 +5,9 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
@@ -27,14 +25,11 @@ public class SwaggerConfig {
                         .type(SecurityScheme.Type.HTTP)
                         .scheme("Bearer"));
 
-        Server server = new Server();
-        server.setUrl("http://localhost:8080"); //서버 주소만 넣어주면 됨
 
         return new OpenAPI()
                 .addSecurityItem(securityRequirement)
                 .components(components)
-                .info(apiInfo())
-                .servers(List.of(server));
+                .info(apiInfo());
 
     }
 

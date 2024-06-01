@@ -1,27 +1,31 @@
 package umc.dofarming.domain.challenge.service;
 
 import lombok.RequiredArgsConstructor;
-import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
+import umc.dofarming.domain.challenge.Challenge;
+import umc.dofarming.domain.challenge.dto.ChallengeResponseDTO;
+import umc.dofarming.domain.challenge.converter.ChallengeConverter;
+import umc.dofarming.domain.challenge.repository.ChallengeRepository;
+import umc.dofarming.domain.member.repository.MemberRepository;
+import umc.dofarming.domain.memberChallenge.repository.MemberChallengeRepository;
+import umc.dofarming.domain.memberChallenge.service.MemberChallengeService;
+import umc.dofarming.util.SecurityUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 import umc.dofarming.api_response.exception.GeneralException;
 import umc.dofarming.api_response.status.ErrorStatus;
-import umc.dofarming.domain.challenge.Challenge;
 import umc.dofarming.domain.challenge.dto.ChallengeResponse;
 import umc.dofarming.domain.challenge.mapper.ChallengeMapper;
-import umc.dofarming.domain.challenge.repository.ChallengeRepository;
 import umc.dofarming.domain.enums.Category;
 import umc.dofarming.domain.enums.RewardType;
 import umc.dofarming.domain.enums.SortBy;
 import umc.dofarming.domain.member.Member;
 import umc.dofarming.domain.member.service.DetailMemberService;
 import umc.dofarming.domain.memberChallenge.MemberChallenge;
-import umc.dofarming.domain.memberChallenge.repository.MemberChallengeRepository;
-import umc.dofarming.util.SecurityUtils;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -31,11 +35,24 @@ import static java.time.LocalDateTime.now;
 @Service
 @RequiredArgsConstructor
 public class ChallengeService {
-
-    private final ChallengeRepository challengeRepository;
+    private final MemberRepository memberRepository;
     private final MemberChallengeRepository memberChallengeRepository;
-
+    private final ChallengeRepository challengeRepository;
     private final DetailMemberService detailMemberService;
+    private final MemberChallengeService memberChallengeService;
+
+    public List<ChallengeResponseDTO.GetMyChallengeInfoResult> findMyChallengeInfo(boolean ongoing){
+        String loginId = SecurityUtils.getCurrentMemberLoginId();
+        Long memberId = memberRepository.findByLoginId(loginId).get().getId();
+        List<Challenge> challengeList = memberChallengeRepository.findChallengesByMemberId(memberId, ongoing);
+        List<ChallengeResponseDTO.GetMyChallengeInfoResult> getMyChallengeInfoResultList = new ArrayList<>();
+        for (Challenge challenge : challengeList) {
+            int count = memberChallengeRepository.findAllByChallenge(challenge).size();
+            ChallengeResponseDTO.GetMyChallengeInfoResult getMyChallengeInfoResult = ChallengeConverter.toChallengeResponseDTO(challenge, count);
+            getMyChallengeInfoResultList.add(getMyChallengeInfoResult);
+        }
+        return getMyChallengeInfoResultList;
+    }
 
     //현재 진행중인 챌린지 리스트
     @Transactional

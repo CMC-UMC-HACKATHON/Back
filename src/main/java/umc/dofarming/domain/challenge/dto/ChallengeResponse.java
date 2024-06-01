@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import umc.dofarming.domain.enums.Category;
 import umc.dofarming.domain.enums.RewardType;
 
-import java.util.List;
-
 public class ChallengeResponse {
     @Builder
     @Getter

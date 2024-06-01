@@ -4,14 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import umc.dofarming.domain.challenge.Challenge;
 import umc.dofarming.domain.enums.Mission;
-import umc.dofarming.domain.member.Member;
-import umc.dofarming.domain.memberChallenge.MemberChallenge;
 import umc.dofarming.domain.memberMission.MemberMission;
 
-import java.time.LocalDate;
+import umc.dofarming.domain.enums.MissionType;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -27,6 +23,9 @@ public class ChallengeMission {
 
     @Enumerated(EnumType.STRING)
     private Mission mission;
+
+    @Enumerated(EnumType.STRING)
+    private MissionType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "challenge_id")
