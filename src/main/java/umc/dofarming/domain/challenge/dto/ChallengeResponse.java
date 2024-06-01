@@ -20,6 +20,7 @@ public class ChallengeResponse {
         String endDate;
         String startDate;
         String category;
+        String categoryImage;
         String rewardType;
         Integer participantNum;
 
@@ -35,6 +36,7 @@ public class ChallengeResponse {
         String endDate;
         String startDate;
         String category;
+        String categoryImage;
         String rewardType;
         Integer participantNum;
         Integer challengeAmount;

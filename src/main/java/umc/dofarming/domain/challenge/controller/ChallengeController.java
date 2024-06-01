@@ -24,7 +24,7 @@ public class ChallengeController {
     private final ChallengeService challengeService;
 
     @GetMapping("")
-    @Operation(summary = "챌린지 리스트 조회 API")
+    @Operation(summary = "챌린지 리스트 조회 API", description = "Defult 챌린지 리스트 4개, 한 챌린지가 끝나면 자동으로 다른 랜덤한 챌린지가 만들어짐")
     @ApiResponses( value ={
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "KEY_NOT_EXIST", description = "SortBy 값 오류"
