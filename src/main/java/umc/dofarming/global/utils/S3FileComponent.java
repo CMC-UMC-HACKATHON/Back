@@ -18,8 +18,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Component
 public class S3FileComponent {
-    private final AmazonS3Client amazonS3Client;
-    @Value("${cloud.aws.s3.bucket}")
+    private final AmazonS3Client amazonS3Client; // AmazonS3Client 객체 주입
+    @Value("${cloud.aws.s3.bucket}") // S3 버킷 이름
     private String bucket;
 
     public String uploadFile(String category, MultipartFile multipartFile) {
