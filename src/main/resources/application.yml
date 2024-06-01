@@ -21,12 +21,12 @@ spring:
 cloud:
   aws:
     s3:
-      bucket: ${AWS_S3_BUCKET}
+      bucket: donfarming
     stack:
       auto: false
     credentials:
-      accessKey: ${AWS_ACCESS_KEY}
-      secretKey: ${AWS_SECRET_KEY}
+      accessKey: AKIA4MTWLPGJ4UXQSWZF
+      secretKey: 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
     region:
       static: ap-northeast-2
       auto: false
