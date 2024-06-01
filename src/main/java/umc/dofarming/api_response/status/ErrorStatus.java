@@ -17,7 +17,13 @@ public enum ErrorStatus implements BaseErrorCode {
     NOT_FOUND(HttpStatus.NOT_FOUND, "Not Found"),
     KEY_NOT_EXIST(HttpStatus.BAD_REQUEST, "존재하지 않는 식별자"),
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 에러"),
-    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "권한 없음");
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "권한 없음"),
+
+    FALIED_READ_IMAGE(HttpStatus.BAD_REQUEST, "이미지 파일 읽기 실패"),
+    FALIED_READ_FILE(HttpStatus.BAD_REQUEST, "파일 읽기 실패"),
+    FAILED_UPLOAD_S3_IMAGE(HttpStatus.BAD_REQUEST, "S3 이미지 업로드 실패"),
+    FAILED_UPLOAD_S3_FILE(HttpStatus.BAD_REQUEST, "S3 파일 업로드 실패");
+
     private final HttpStatus httpStatus;
     private final String code;
     private String message;

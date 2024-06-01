@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import umc.dofarming.api_response.exception.GeneralException;
+import umc.dofarming.api_response.status.ErrorStatus;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -37,9 +39,9 @@ public class S3FileComponent {
         } catch (IOException e) {
             // 파일 업로드 실패 시 에러 코드 분기
             if (isImage) {
-                //todo: throw new RestApiException(S3ErrorCode.FALIED_READ_IMAGE);
+                throw new GeneralException(ErrorStatus.FALIED_READ_IMAGE);
             } else {
-                //todo: throw new RestApiException(S3ErrorCode.FALIED_READ_FILE);
+                throw new GeneralException(ErrorStatus.FALIED_READ_FILE);
             }
         }
 
@@ -56,9 +58,9 @@ public class S3FileComponent {
         } catch (AmazonS3Exception e) {
             // S3 업로드 실패 시 에러 코드 분기
             if (isImage) {
-                //todo: throw new RestApiException(S3ErrorCode.FAILED_UPLOAD_S3_IMAGE);
+                throw new GeneralException(ErrorStatus.FAILED_UPLOAD_S3_IMAGE);
             } else {
-                //todo: throw new RestApiException(S3ErrorCode.FAILED_UPLOAD_S3_FILE);
+                throw new GeneralException(ErrorStatus.FAILED_UPLOAD_S3_FILE);
             }
         }
 
