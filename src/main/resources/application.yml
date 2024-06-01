@@ -18,6 +18,17 @@ spring:
     url: jdbc:mysql://umc-rds.cgmewprrlt8y.ap-northeast-2.rds.amazonaws.com/umc
     username: umc
     password: umcumc1234
-
+cloud:
+  aws:
+    s3:
+      bucket: donfarming
+    stack:
+      auto: false
+    credentials:
+      accessKey: AKIA4MTWLPGJ4UXQSWZF
+      secretKey: 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
+    region:
+      static: ap-northeast-2
+      auto: false
 jwt:
   secret: donfarmingdonfarmingdonfarmingdonfarmingdonfarmingdonfarmingdonfarmingdonfarming

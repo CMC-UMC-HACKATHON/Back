@@ -1,4 +1,4 @@
-package umc.dofarming.domain.controller.response;
+package umc.dofarming.domain.member.controller.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
