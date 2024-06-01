@@ -4,14 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import umc.dofarming.domain.challenge.Challenge;
 import umc.dofarming.domain.enums.Mission;
-import umc.dofarming.domain.member.Member;
-import umc.dofarming.domain.memberChallenge.MemberChallenge;
 import umc.dofarming.domain.memberMission.MemberMission;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
