@@ -2,6 +2,7 @@ package umc.dofarming.domain.memberMission;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.util.StringUtils;
 import umc.dofarming.domain.challengeMission.ChallengeMission;
 import umc.dofarming.domain.enums.MissionStatus;
 import umc.dofarming.domain.member.Member;
@@ -32,5 +33,9 @@ public class MemberMission {
     @JoinColumn(name = "challenge_mission_id")
     private ChallengeMission challengeMission;
 
-
+    public void proofMission(String proofUrl, String proofText) {
+        this.proofUrl = proofUrl;
+        this.proofText = StringUtils.hasText(proofText) ? proofText : null;
+        this.missionStatus = MissionStatus.COMPLETE;
+    }
 }
