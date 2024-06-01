@@ -3,12 +3,16 @@ package umc.dofarming.domain.challenge.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import umc.dofarming.domain.challenge.Challenge;
+import umc.dofarming.domain.challenge.controller.response.ChallengeResultDto;
+import umc.dofarming.domain.challenge.controller.response.ChallengeResultResponse;
 import umc.dofarming.domain.challenge.dto.ChallengeResponseDTO;
 import umc.dofarming.domain.challenge.converter.ChallengeConverter;
 import umc.dofarming.domain.challenge.repository.ChallengeRepository;
+import umc.dofarming.domain.challengeMission.repository.ChallengeMissionRepository;
 import umc.dofarming.domain.member.repository.MemberRepository;
 import umc.dofarming.domain.memberChallenge.repository.MemberChallengeRepository;
 import umc.dofarming.domain.memberChallenge.service.MemberChallengeService;
+import umc.dofarming.domain.memberMission.repository.ListMemberMissionRepository;
 import umc.dofarming.util.SecurityUtils;
 
 import java.util.ArrayList;
@@ -34,12 +38,15 @@ import static java.time.LocalDateTime.now;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ChallengeService {
     private final MemberRepository memberRepository;
     private final MemberChallengeRepository memberChallengeRepository;
     private final ChallengeRepository challengeRepository;
     private final DetailMemberService detailMemberService;
     private final MemberChallengeService memberChallengeService;
+    private final ChallengeMissionRepository challengeMissionRepository;
+    private final ListMemberMissionRepository listMemberMissionRepository;
 
     public List<ChallengeResponseDTO.GetMyChallengeInfoResult> findMyChallengeInfo(boolean ongoing){
         String loginId = SecurityUtils.getCurrentMemberLoginId();
@@ -142,6 +149,31 @@ public class ChallengeService {
                 .challenge(challenge.get())
                 .member(member)
                 .build()).getId();
+    }
+
+    public ChallengeResultResponse getChallengeResult(Long challengeId) {
+        List<ChallengeResultDto> resultList = listMemberMissionRepository.getChallengeResult(challengeId);
+
+        int myRanking = 0, myReward = 0;
+        for (int i = 1; i <= resultList.size(); i++) {
+            ChallengeResultDto dto = resultList.get(i - 1);
+            int reward = 0;
+            if (i == 1) reward = dto.getMoney() / 2;
+            else if (i == 2) reward = 3 * dto.getMoney() / 10;
+            else if (i == 3) reward = 2 * dto.getMoney() / 10;
+            dto.update(1, Integer.toString(reward));
+
+            if (dto.getLoginId().equals(SecurityUtils.getCurrentMemberLoginId())) {
+                myRanking = i;
+                myReward = reward;
+            }
+        }
+
+        return ChallengeResultResponse.builder()
+          .ranking(myRanking)
+          .reward(Integer.toString(myReward))
+          .rankingList(resultList.subList(0,Math.min(resultList.size(), 3)))
+          .build();
     }
 
     @Transactional //챌린지 랜덤 생성
