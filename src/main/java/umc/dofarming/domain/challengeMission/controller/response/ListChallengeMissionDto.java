@@ -18,6 +18,9 @@ public class ListChallengeMissionDto {
   @Schema(description = "챌린지 미션 ID")
   private long missionId;
 
+  @Schema(description = "인증 이미지 URL")
+  private String proofUrl;
+
   @Schema(description = "챌린지 미션 상태(진행중, 완료)")
   private MissionStatus missionStatus;
 

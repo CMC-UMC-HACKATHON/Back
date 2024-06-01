@@ -25,6 +25,7 @@ public class ListChallengeMissionRepository {
     return queryFactory
       .select(Projections.fields(ListChallengeMissionDto.class,
           challengeMission.id.as("missionId"),
+          memberMission.proofUrl.as("proofUrl"),
           memberMission.missionStatus,
           challengeMission.type.as("missionType"),
           challengeMission.mission.stringValue().as("missionName")
