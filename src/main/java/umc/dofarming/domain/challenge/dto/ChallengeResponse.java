@@ -19,8 +19,8 @@ public class ChallengeResponse {
         String title;
         String endDate;
         String startDate;
-        Category category;
-        RewardType rewardType;
+        String category;
+        String rewardType;
         Integer participantNum;
 
     }
@@ -34,8 +34,8 @@ public class ChallengeResponse {
         String title;
         String endDate;
         String startDate;
-        Category category;
-        RewardType rewardType;
+        String category;
+        String rewardType;
         Integer participantNum;
         Integer challengeAmount;
         Integer challengeTotalAmount;
